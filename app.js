@@ -6,11 +6,7 @@ app.set("view engine", "ejs");
 // middlewares
 app.use(express.static("public"));
 app.use((req, res, next) => {
-  console.log("Hi! This is a first middleware.");
-  next();
-});
-app.use((req, res, next) => {
-  console.log("Hi! This is a second middleware.");
+  console.log(req.method);
   next();
 });
 
@@ -28,7 +24,13 @@ app.use((req, res, next) => {
 //   });
 
 app.get("/", (req, res) => {
-  res.send("Welcome to homepage.");
+  res.sends("Welcome to homepage.");
+});
+
+//Error handlers
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something is broken");
 });
 
 app.listen(3000, () => {
