@@ -1,12 +1,21 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const session = require("express-session");
 
 app.set("view engine", "ejs");
 // middlewares
 app.use(express.static("public"));
-app.use(cookieParser());
+app.use(cookieParser("goodVibe"));
+app.use(
+  session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 app.use((req, res, next) => {
   next();
 });
@@ -21,10 +30,28 @@ mongoose
   });
 
 app.get("/", (req, res) => {
-  console.log(req.cookies);
-  const { name } = req.cookies;
-  res.send(`Hi!${name}<br>Welcome to the home page`);
+  console.log(process.env.SECRET);
+  res.send(`Welcome to the home page`);
 });
+
+app.get("/verifyUser", (req, res) => {
+  req.session.isVerified = true;
+  res.send("You are verified.");
+});
+
+app.get("/secret", (req, res) => {
+  if (req.session.isVerified == true) {
+    res.send("I love dogs and cats.");
+  } else {
+    res.status(403).send("You are not authorized to see my secret.");
+  }
+});
+
+// app.get("/getSignedCookies", (req, res) => {
+//   res
+//     .cookie("address", "YongFu Rd.", { signed: true })
+//     .send("Cookie has been send");
+// });
 
 // const monkeySchema = new mongoose.Schema({
 //   name: {
