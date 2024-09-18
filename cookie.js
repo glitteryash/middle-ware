@@ -4,6 +4,7 @@ const app = express();
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const flash = require("connect-flash");
 
 app.set("view engine", "ejs");
 // middlewares
@@ -16,6 +17,8 @@ app.use(
     saveUninitialized: false,
   })
 );
+app.use(flash());
+
 app.use((req, res, next) => {
   next();
 });
@@ -30,8 +33,8 @@ mongoose
   });
 
 app.get("/", (req, res) => {
-  console.log(process.env.SECRET);
-  res.send(`Welcome to the home page`);
+  req.flash("success_msg", "Successfully get to the homepage");
+  res.send(`Hi! ${req.flash("success_msg")}`);
 });
 
 app.get("/verifyUser", (req, res) => {
