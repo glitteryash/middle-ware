@@ -47,11 +47,11 @@ app.get("/secret", (req, res) => {
   }
 });
 
-// app.get("/getSignedCookies", (req, res) => {
-//   res
-//     .cookie("address", "YongFu Rd.", { signed: true })
-//     .send("Cookie has been send");
-// });
+app.get("/getSignedCookies", (req, res) => {
+  res
+    .cookie("address", "YongFu Rd.", { signed: true })
+    .send("Cookie has been send");
+});
 
 // const monkeySchema = new mongoose.Schema({
 //   name: {
@@ -79,7 +79,7 @@ app.get("/secret", (req, res) => {
 //   }
 // });
 
-app.get("/*", (res, req) => {
+app.get("/*", (req, res) => {
   res.status(404).send("Paga not found");
 });
 
